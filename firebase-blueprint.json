@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Stores user basic info, their solar preferences, and partner onboarding details",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "formSubmitted": { "type": "boolean", "description": "Whether the user has filled the mandatory Google Form" },
+        "googleFormSubmitted": { "type": "boolean" },
+        "partnerOnboardingCompleted": { "type": "boolean" },
+        "orgName": { "type": "string" },
+        "employeeStrength": { "type": "string" },
+        "contactNo": { "type": "string" },
+        "state": { "type": "string" },
+        "district": { "type": "string" },
+        "pinCode": { "type": "string" },
+        "sheetUserId": { "type": "string" },
+        "lastBillData": { 
+          "type": "object",
+          "properties": {
+            "connectedLoad": { "type": "number" },
+            "unitsConsumed": { "type": "number" }
+          }
+        },
+        "solarPreferences": {
+          "type": "object",
+          "properties": {
+            "systemType": { "type": "string", "enum": ["on-grid", "off-grid", "hybrid"] },
+            "roofSize": { "type": "string", "enum": ["small", "medium", "large"] }
+          }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "BillReport": {
+      "title": "Bill Report",
+      "description": "Historical record of solar calculations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "billData": { "$ref": "UserProfile.properties.lastBillData" },
+        "systemSize": { "type": "number" },
+        "systemType": { "type": "string" },
+        "cost": { "type": "number" },
+        "subsidy": { "type": "number" },
+        "savings": { "type": "number" }
+      }
+    },
+    "Feedback": {
+      "title": "User Feedback",
+      "description": "Feedback submitted by users",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "userName": { "type": "string" },
+        "feedback": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "language": { "type": "string" }
+      },
+      "required": ["userId", "feedback"]
+    },
+    "WarrantyRecord": {
+      "title": "Warranty Record",
+      "description": "Warranty and invoice data uploaded by vendors/users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "vendorName": { "type": "string" },
+        "customerName": { "type": "string" },
+        "installationDate": { "type": "string" },
+        "systemSize": { "type": "number" },
+        "panelBrand": { "type": "string" },
+        "panelSerialNumbers": { "type": "string" },
+        "invoiceNo": { "type": "string" },
+        "warrantyCardNo": { "type": "string" },
+        "documentNotes": { "type": "string" },
+        "invoiceFileName": { "type": "string" },
+        "warrantyCardFileName": { "type": "string" },
+        "invoiceDataUrl": { "type": "string" },
+        "warrantyCardDataUrl": { "type": "string" }
+      },
+      "required": ["vendorName", "customerName", "panelBrand", "invoiceNo", "warrantyCardNo"]
+    },
+    "Lead": {
+      "title": "System Lead",
+      "description": "Information collected for solar free roof inspections",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "contact": { "type": "string" },
+        "district": { "type": "string" },
+        "pincode": { "type": "string" },
+        "kwSize": { "type": "number" },
+        "cost": { "type": "number" },
+        "systemType": { "type": "string" },
+        "email": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "serverTimestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "contact", "systemType"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document"
+    },
+    "users/{userId}/reports/{reportId}": {
+      "schema": "BillReport",
+      "description": "Historical bill reports"
+    },
+    "users/{userId}/warranties/{warrantyId}": {
+      "schema": "WarrantyRecord",
+      "description": "Uploaded warranty and bill certificates"
+    },
+    "feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "All user feedback submissions"
+    },
+    "leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Leads generated for free site inspection bookings"
+    }
+  }
+}
