@@ -1,6 +1,0 @@
-{
-  "name": "সৌর মিত্র (Saurya Mitra)",
-  "description": "Bengali Solar Energy Consultant for Home-Office Professionals. Features Smart Bill Reader, Savings Calculator, and Government Subsidy Guide.",
-  "requestFramePermissions": ["microphone"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
